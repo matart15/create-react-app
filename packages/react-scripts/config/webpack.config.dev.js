@@ -220,6 +220,20 @@ module.exports = {
               },
             ],
           },
+          {
+            test: /\.scss$/,
+            use: [
+              'style-loader',
+              // Using source maps breaks urls in the CSS loader
+              // https://github.com/webpack/css-loader/issues/232
+              // This comment solves it, but breaks testing from a local network
+              // https://github.com/webpack/css-loader/issues/232#issuecomment-240449998
+              // 'css-loader?sourceMap',
+              'css-loader?importLoaders=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+              'postcss-loader',
+              'sass-loader',
+            ],
+          },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.
