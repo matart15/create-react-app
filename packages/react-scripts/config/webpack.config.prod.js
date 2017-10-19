@@ -242,10 +242,17 @@ module.exports = {
           },
           {
             test: /\.scss$/,
-            loader: ExtractTextPlugin.extract({
-              fallbackLoader: 'style-loader',
-              loader: 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!sass-loader',
-            }),
+            use: [
+              'style-loader',
+              // Using source maps breaks urls in the CSS loader
+              // https://github.com/webpack/css-loader/issues/232
+              // This comment solves it, but breaks testing from a local network
+              // https://github.com/webpack/css-loader/issues/232#issuecomment-240449998
+              // 'css-loader?sourceMap',
+              'css-loader?importLoaders=1&modules&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+              'postcss-loader',
+              'sass-loader',
+            ],
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
